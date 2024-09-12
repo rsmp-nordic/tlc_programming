@@ -1,0 +1,47 @@
+# global defaults, for all sigmal programs and groups
+# you can override this in groups
+startup_sequence: {dark: 2, yellow: 2, red: 2 }
+red_yellow: 1.5 # time in red+yellow before green. exact time
+
+# base config
+signal_groups: # configuration of singal groups
+  a1: # name of signal group
+    #  required
+    description: Motor vehicles in northgoing direction
+    traffic_mode: car
+    startup_sequence: {dark: 2, yellow: 2, red: 2 }
+    minimum_green_time: 6
+    red_yellow: 1.5 # time in red+yellow before green. exact time
+    fixed_yellow: 2 # time in yellow before red. exact time
+
+    # optionals
+    stop: 15 # optional
+    variable_yellow: 2 # optional. used in connection with detectors
+    variable_red: 4 # optional. maximum time red can be extended
+  a2: ...
+  b1: ...
+  b2: ...
+
+safety_times: # time between a group goes red, until conflicting groups goes green. conflic matrix can be generated from this.
+    #  a1,a2,b1,b2]
+  a1: [x, 6, 0, x]
+  a2: [3, x, 3, 5]
+  b1: [4, x, x, 5]
+  b2: [3, 6, 3, x]  
+
+# signal program
+control_mode: isolated  # the overall control strategy, can be fixed, isolated, actuated, coordinated or adaptive
+cycle_time: 80 # used only in fixed and coordinated mode
+
+signal_groups:
+  a1:
+    phases: [2,3} # optional, used if the program uses isolated control (not centralized)
+    start: [10.5, 45] # also know as c-pulses (central pulse)
+    stop: [15]
+    maximum_green_time: 50
+
+detectors: # what happens when a detector is active? e.g extend green times
+  dl1:
+    signal_group: b1
+    mode: [extend] # can be extend and/or request
+    # more todo
