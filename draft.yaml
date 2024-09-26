@@ -48,6 +48,8 @@ programs:
         past_end_green_time: 12
         priviledged_time: 15 # used in Sweden, can be from 1 to infinity
         detection: [dl1,dl3]
+        dynamic_bands:
+          ...
   low_intesity:
     ..
     signal_groups:
