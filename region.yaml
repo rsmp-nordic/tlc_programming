@@ -1,6 +1,5 @@
 # region/country defaults, typically mandated by laws or guidelines
-# it's the same for all controller and signal programs and groups
+# these settings would be the same for all controller and signal programs and groups
 # you can override these settings in groups
 regional:
-  startup_sequence: {dark: 2, yellow: 2, red: 2 }
   red_yellow: 1.5 # time in red+yellow before green. exact time
