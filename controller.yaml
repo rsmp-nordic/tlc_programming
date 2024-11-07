@@ -1,0 +1,6 @@
+# controller config
+# a controller have one or more intersection
+
+intersections:
+  1: {}
+  2: {}
