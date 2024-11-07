@@ -1,0 +1,5 @@
+# region/country defaults, for all controller and sigmal programs and groups
+# you can override this in groups
+global:
+  startup_sequence: {dark: 2, yellow: 2, red: 2 }
+  red_yellow: 1.5 # time in red+yellow before green. exact time
