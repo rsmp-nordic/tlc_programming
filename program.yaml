@@ -1,39 +1,14 @@
 # signal program
 programs:
-  high_intesity:
-    descriptrion: Used in situation with high traffic volumes towards the city.
-    control_mode: fixed  # the overall control strategy, can be fixed, isolated, actuated, coordinated or adaptive
-    cycle_time: 80 # used only in fixed and coordinated mode
-    signal_groups:
-      a1:
-        phases: [2,3] # optional, used if the program uses isolated control (not centralized)
-        start: [10.5, 45] # also know as c-pulses (central pulse)
-        stop: [15]
-        past_end_green_time: 12
-        priviledged_time: 15 # used in Sweden, can be from 1 to infinity
-        detection: [dl1,dl3]
-        dynamic_bands:
-          ...
-  low_intesity:
-    ..
-    signal_groups:
-      a1:
-        detection: [dl2,dl3]
-
-
-# detection logics
-# what happens when a detector is active? e.g. extend green times
-detector_logics:
-  dl1:
-    description: Bus priority, big extension
-    groups:
-    request:
-    extend:
-    function:
-  dl2:
-    description: Bus priority, small extension
-    groups:
-    request:
-    extend:
-    function:
-  
+  id: 5
+  namw: high Intensity Morning
+  description: Used in situation with high traffic volumes towards the city.
+  control_mode: fixed     # the overall control strategy, can be fixed, isolated, actuated, coordinated or adaptive
+  cycle_time: 80       # used only in fixed and coordinated mode
+  events:
+    # a consise format where you define when certain things should happen
+    # and the controller determines e.g. yellow times
+    5: { "a1": "green", "a2": "green" }
+    10.5: { "a2": "red" },
+    25: { "b1": "green", "b2": "green_flash" }
+ 
