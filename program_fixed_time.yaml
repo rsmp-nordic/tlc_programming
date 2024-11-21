@@ -10,8 +10,8 @@ programs:
     # You must stop conflicting groups.
     # The start/stop time is when transition starts, e.g. yellow or red-yellow.
     # The controller uses configs for yellow tines to handle the transitions.
-    # Start/stop depends on the group, e.g. green/red, or flash/dark.
-    # You can write illegal progams, the controller will always respect conflict matrix to
+    # What start/stop does depends on the group, e.g. green/red or flash/dark.
+    # You can write illegal progams, but the controller will always respect conflict matrix to
     # prevent e.g. green in conflicting diretions.
 
     # An basic example:
