@@ -5,10 +5,22 @@ programs:
   description: Used in situation with high traffic volumes towards the city.
   control_mode: fixed     # the overall control strategy, can be fixed, isolated, actuated, coordinated or adaptive
   cycle_time: 80       # used only in fixed and coordinated mode
-  events:
-    # a consise format where you define when certain things should happen
-    # and the controller determines e.g. yellow times
-    5: { "a1": "green", "a2": "green" }
-    10.5: { "a2": "red" },
-    25: { "b1": "green", "b2": "green_flash" }
- 
+  commands:
+    # A consise format where you define when groups start and stop
+    # You must stop conflicting groups.
+    # The start/stop time is when transition starts, e.g. yellow or red-yellow.
+    # The controller uses configs for yellow tines to handle the transitions.
+    # Start/stop depends on the group, e.g. green/red, or flash/dark.
+    # You can write illegal progams, the controller will always respect conflict matrix to
+    # prevent e.g. green in conflicting diretions.
+
+    # An basic example:
+    0: { "start": ["a1","a2"], "stop": ["b1", "b2"] }
+    40: { "stop": ["a1","a2"], "start": ["b1", "b2"] }
+
+    # An example with longer integreen times for b2 (it stays red for longer).
+    0: { "start": ["a1","a2"], "stop": ["b1", "b2"] }
+    40: { "stop": ["a1","a2"], "start": ["b1"] }
+    50: { "start": ["b2"] }
+
+   
