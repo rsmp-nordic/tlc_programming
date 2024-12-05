@@ -9,6 +9,8 @@ Config@{shape: document} --> Controller
 Controller --> Lamps
 ```
 
+Programs can be created with any suitable editor, and then deployed to the controller.
+
 To run a a program, other configurations must be present on the controller. including:
 - regional configurations, e.g. red-yellow times
 - intersection configurations, e.g. signal groups and their conflict matrix
