@@ -50,17 +50,6 @@ commands:
   30: { "stop": ["a1","a2"], "start": ["b1", "b2"] }
 ```
 
-```mermaid
-gantt
-    title Fixed Time Program
-    dateFormat ss
-    section a1
-        Green           :a1, 00, 30s
-    section b1
-        Green           :b1, 30, 30s
-```
-
-
 `length` defines the cycle length in seconds, in this case 60s. When this time is reached, the program starts over.
 
 `commands` is a hash of commands. The key indicating the time in seconds, while the value is a hash of commands:
