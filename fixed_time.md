@@ -67,8 +67,8 @@ to custome each change, since they are handled automatically by the controller.
 ### Smart Commands
 With smart commands, you request the controller to reach a specific state, and it determines how, e.g. by first going to yellow.
 
-- `start`: Requests that groups start. Depending on the type of a signal group, this could mean green, flashing., etc.
-- `stop`: Requets that groups stop. Depending on the type of signal group, this could mean red, dark, etc.
+- `start`: Start groups. Depending on the type of a signal group, this could mean green, flashing., etc.
+- `stop`: Stop groups. Depending on the type of signal group, this could mean red, dark, etc.
 
 ### Manual Commands
 Manual commands are used to force a particular state immediately, making it possible to customize things like yellow times.
