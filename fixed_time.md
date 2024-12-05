@@ -17,8 +17,8 @@ Each command lists the signal groups it affects.
 
 For example, consider a simple four-legged interesection with A and B directions. The intersection has four singal groups: a1, a2, b1 and b2.
 
-A simnple fixed time program for this intersection mighth have a cycle length of 60s, with the A direction being green for the first 30s, and the B direction being green
-for the last 30s.
+A simple fixed time program for this intersection might have a cycle length of 60s, with the A direction being green for the first 30s, and the B direction being green
+for the last 30s, with some yellow transitions in between.
 
 
 ```mermaid
