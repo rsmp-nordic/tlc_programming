@@ -90,6 +90,6 @@ commands:
   33: { "green": ["b1", "b2"] }
 ```
 
-Manual commands gives you full ability to customize every change, but you're responsible for taking into acocunt safety times, etc.
-and program definitions are not quite as concise as when using smart commands.
+Manual commands gives you full ability to customize every change, but you're responsible for taking into account safety times, 
+yellow transitions, etc. and program definitions are not quite as concise as when using smart commands.
 
