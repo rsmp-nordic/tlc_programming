@@ -6,12 +6,12 @@ All cycles are exactly the same, and there is no use of detectors. The controlle
 ## Prerequisites
 Running a fixed time program depends on separate intersection, controller and region configurations.
 
-Specifiically, signal groups and the conflict matrix are defines in the intersction configurarion, not in the signal program.
+Specifiically, signal groups and the conflict matrix are defines in the intersection configurarion, not in the signal program.
 
 Similary, regional settings like red-yellow time is defined in the regional/controller/intersection configuration, not in the signal program.
 
-## Format
-A fixed time program defines a cycle length, and has a number of commands happening at specific times.
+## Structure
+A fixed time program defines a cycle length, and has a number of commands at specific times.
 
 Each command lists the signal groups it affects.
 
@@ -20,7 +20,28 @@ For example, consider a simple four-legged interesction with A and B directions.
 A simnple fixed time program for this intersection mighth have a cycle length of 60s, with the A direction being green for the first 30s, and the B direction being green
 for the last 30s.
 
-This can be described as:
+
+```mermaid
+---
+displayMode: compact
+---
+gantt
+    title Fixed Time Program
+    dateFormat ss
+    axisFormat %S
+    todayMarker off
+    section a1
+        green :green, 00, 30s
+    section a2
+        green :green, 00, 30s
+    section b1
+        green :green, 30, 30s
+    section b2
+        green :green, 30, 30s
+```
+
+
+This RSMP fixed time program for this is:
 
 ```yaml
 length: 60
@@ -28,6 +49,17 @@ commands:
   0: { "start": ["a1","a2"], "stop": ["b1", "b2"] }
   30: { "stop": ["a1","a2"], "start": ["b1", "b2"] }
 ```
+
+```mermaid
+gantt
+    title Fixed Time Program
+    dateFormat ss
+    section a1
+        Green           :a1, 00, 30s
+    section b1
+        Green           :b1, 30, 30s
+```
+
 
 `length` defines the cycle length in seconds, in this case 60s. When this time is reached, the program starts over.
 
