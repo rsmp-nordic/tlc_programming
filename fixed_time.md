@@ -41,7 +41,7 @@ gantt
 ```
 
 
-This RSMP fixed time program for this is:
+The program for this is:
 
 ```yaml
 length: 60
