@@ -11,9 +11,10 @@ Controller --> Lamps
 
 Programs can be created with any suitable editor, and then deployed to the controller.
 
-To run a a program, other configurations must be present on the controller. including:
-- regional configurations, e.g. red-yellow times
-- intersection configurations, e.g. signal groups and their conflict matrix
+To run a a program, other [configurations](configurations.md) must be present on the controller. including:
+- regional configurations, e.g. red-yellow times.
+- controller configurations, e.g. list of intersections.
+- intersection configurations, e.g. signal groups and their conflict matrix.
 
 When the controller runs the program it will change lamps over time according, e.g. change 
 between red, yellow and green. Flashing yellow, dark, etc. are also possible, depending
