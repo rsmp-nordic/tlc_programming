@@ -72,7 +72,7 @@ run the program.
 Example:
 
 ```yaml
-length 60:
+length: 60
 commands:
   0: { "red-yellow": ["a1", "a2"], ""red": ["b1", "b2"] }
   3: { "green": ["a1", "a2"] }
@@ -90,7 +90,7 @@ You can mix smart and manual commands. This is convenient when you only need to 
 Example:
 
 ```yaml
-length 60:
+length: 60
 commands:
   0: { "start": ["a1","a2"], "stop": ["b1", "b2"] }
   30: { "red": ["a1", "a2"], "red-yellow": ["b1", "b2"] }
