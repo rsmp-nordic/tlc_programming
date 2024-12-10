@@ -5,7 +5,8 @@ Configurations are organized in a hierachy from general to specific.
 
 ```mermaid
 graph LR
-Regional --- Controller --- Intersection
+Regional@{shape: document} --- Controller@{shape: document}
+Controller --- Intersection@{shape: document}
 ```
 ## Regional
 Configurations which are typically the same for all controllers in a region, often due to natioanl/regional regulation.
