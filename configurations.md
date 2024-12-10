@@ -17,12 +17,14 @@ Configurations which are typically the same for all controllers in a region, oft
 Configuration of a particular controller.
 A controller manages one or more physical/logical intersections.
 
- - List of intesections
+ - Controller id, name, description
+ - List of intersections
 
 ## Intersection
 Configurations for a particular physical/logical intersection.
 
-- List of signal groups
+- Configuration of of signal groups, including things like red-yellow and fixed yellow times.
+- Conflict matrix
 
 
 
