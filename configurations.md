@@ -1,5 +1,5 @@
 # Configurations
-Running a signal program depends on certain configurations that are outside of the signal progam.
+Running a signal program depends on certain configurations defined outside of the signal progam.
 
 Configurations are organized in a hierachy from general to specific.
 
