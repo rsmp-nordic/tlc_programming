@@ -99,3 +99,13 @@ commands:
 
 Here we use manual commands to keep b1 and b2 are in red-yellow for 10s before going to green, but use smart commands
 for everything else.
+
+## Failures
+If running a program results in conflict or inconsistencies, a fault will occur.
+
+Faults can occur with both manual and smart commands if they are used in a way that lead to conflict or
+violation of transition/timing rules.
+
+Depending on the configuration of the controller, a fault can lead e.g. dark mode, yellow flah or switch to a fault program.
+
+To avoid failures, programs should be validated using a suitable simulator or test tool before deployment.
