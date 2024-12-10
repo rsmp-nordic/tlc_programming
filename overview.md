@@ -24,7 +24,7 @@ on the signal group type.
 Program are stored as YAML files, but can be transmitted as eg. JSON or CBOR.
 
 ## Control Strategies
-Only [fixed-time](fixed_time.md) control is supported initially.
+The first control strategy supported is [fixed-time](fixed_time.md).
 
 Additional control strategies will be added later.
 
