@@ -93,7 +93,7 @@ Example:
 length: 60
 commands:
   0: { "start": ["a1","a2"], "stop": ["b1", "b2"] }
-  30: { "red": ["a1", "a2"], "red-yellow": ["b1", "b2"] }
+  30: { "stop": ["a1", "a2"], "red-yellow": ["b1", "b2"] }
   33: { "green": ["b1", "b2"] }
 ```
 
