@@ -18,10 +18,10 @@ A fixed-time program defines a cycle length and the transitions:
 length: 60
 groups: ["a1","a2","b1","b2"]
 states:
-  0:  "00AA"
-  2:  "11AA"
-  30: "AA00"
-  34: "AA11"
+  0:    "00AA"
+  2.5:  "11AA"
+  30:   "AA00"
+  34:   "AA11"
 ```
 
 - `length` defines the cycle length in seconds, in this case 60s. When this time is reached, the program starts over.
