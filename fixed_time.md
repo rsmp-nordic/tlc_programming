@@ -81,9 +81,9 @@ commands:
   40: { "green": ["b1", "b2"] }
 ```
 
-Here we use manual commands to but groups to red-yellow for three seconds before going green.
-Manual commands lets you can customize every transition and state, but you're responsible for taking into account safety times, 
-yellow transitions, etc. and program definitions are not as concise as when using smart commands.
+Here we use manual commands order groups to red-yellow for three seconds before going green.
+Manual commands lets you customize every transition and state, but you're responsible for taking into account safety times, 
+yellow transitions, etc.
 
 ### Mixing Smart and Manual Command
 You can mix smart and manual commands. This is convenient when you only need to customize specific things.
