@@ -16,13 +16,13 @@ To run a a program, other [configurations](configurations.md) must be present on
 - controller configurations, e.g. list of intersections.
 - intersection configurations, e.g. signal groups and their conflict matrix.
 
-When the controller runs the program it will change lamps over time according, e.g. change 
-between red, yellow and green. Flashing yellow, dark, etc. are also possible, depending
+When the controller runs the program it will change lamps and/or other hardware over time, e.g. change 
+between red, yellow and green. Flashing yellow, dark, sound signals, etc. are also possible, depending
 on the signal group type.
 
-The internals safety mechanisms of the controller must be active at all times and take over at any time a safety
+The internal safety mechanisms of the controller must be active at all times and take over at any time a safety
 relevant fault occurs. Similarly, should the parameters lead to any unsafe, undefined or disallowed signals,
-the comtroller must take over the control and ensure that safety requirements are not compromised.
+the controller must take over and ensure that safety is not compromised.
 
 ## Format
 Program are stored as YAML files, but can be transmitted as eg. JSON or CBOR.
