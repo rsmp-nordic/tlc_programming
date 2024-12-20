@@ -26,8 +26,9 @@ states:
 
 - `length` defines the cycle length in seconds, in this case 60s. When this time is reached, the program starts over.
 - `groups` is an ordered lists of signal groups.
-- `states` is a hash of signal states. The key indicating the time in seconds, while the value string, where each
-  character represent the state of a signal group. The first character corresponds to the first group in the `groups` list,
+- `states` is a hash of signal states, with keys indicating the time in seconds and the representing the group states.
+  Each character in the string represent the state of a signal group;
+  the first character corresponds to the first group in the `groups` list,
   the second characater to the second item, etc. The allowed state values are explained below.
 
 The above program is for a simple four-legged interesection with A and B directions. The intersection has four singal groups; a1, a2, b1 and b2. The A direction is green for the first 30s and the B direction is green (1) for the last 30s, with some red-yellow (0) transitions in between:
