@@ -1,5 +1,5 @@
 # Overview
-An RSMP TLC Program is a standardized way to describe a signal program for a traffic light controller.
+An RSMP TLC Program is a standardized and vendor-neutral way to describe a signal program for a traffic light controller.
 
 ```mermaid
 graph LR
