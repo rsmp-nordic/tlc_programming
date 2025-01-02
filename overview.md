@@ -11,7 +11,7 @@ Controller --> Lamps
 
 Programs can be created with any suitable editor, and then deployed to the controller.
 
-To run a a program, other [configurations](configurations.md) must be present on the controller. including:
+To run a program, other [configurations](configurations.md) must be present on the controller. including:
 - regional configurations, e.g. red-yellow times.
 - controller configurations, e.g. list of intersections.
 - intersection configurations, e.g. signal groups and their conflict matrix.
