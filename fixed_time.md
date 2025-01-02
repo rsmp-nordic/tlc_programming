@@ -1,7 +1,5 @@
 # Fixed Time Program
-A fixed time program is a basic form of control strategy which define a fixed cycle length and a fixed schedule of when signal groops change.
-
-The controller is playing back a predefined program. There is no use of detectors and each cycle is exactly the same.
+A fixed time program is a basic form of control strategy which define a fixed cycle length and a fixed schedule of when signal groops change. There is no use of detectors and each cycle is exactly the same.
 
 ## Prerequisites
 Running a fixed time program depends on regional, controller and intersection [configurations](configurations.md), which are defined outside the
