@@ -13,7 +13,8 @@ Similary, regional settings like red-yellow time is defined in the regional/cont
 A fixed-time program defines a cycle length and the transitions:
 
 ```yaml
-length: 60
+length: 60.0
+offset: 0.0
 groups: ["a1","a2","b1","b2"]
 states:
   0:    "00AA"
@@ -23,6 +24,7 @@ states:
 ```
 
 - `length` defines the cycle length in seconds, in this case 60s. When this time is reached, the program starts over.
+- `offset` defines the offset in seconds, in this case 0s.
 - `groups` is an ordered lists of signal groups.
 - `states` is a hash of signal states, with keys indicating the time in seconds and the representing the state of all groups.
   Each character in the string represent the state of a signal group;
