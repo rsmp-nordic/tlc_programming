@@ -10,7 +10,7 @@ Specifically, signal groups and the conflict matrix are defines in the intersect
 Similary, regional settings like red-yellow time is defined in the regional/controller/intersection configuration, not in the signal program.
 
 ## Structure
-A fixed-time program defines a cycle length and the transitions:
+A fixed-time program defines the cycle length and offset and all signal group transitions:
 
 ```yaml
 length: 60
@@ -25,7 +25,7 @@ states:
 
 - `length` defines the cycle length in seconds. Must be positive. When this time is reached, the program starts over.
 - `offset` defines the cycle offset in seconds. Must be in the range 0..length.
-- `groups` is an ordered lists of signal groups. Must match the actual groups
+- `groups` is an ordered lists of signal groups. Must match the actual groups.
 - `states` is a hash of signal states, with keys indicating the time in seconds and the representing the state of all groups.
   Each character in the string represent the state of a signal group;
   the first character corresponds to the first group in the `groups` list,
