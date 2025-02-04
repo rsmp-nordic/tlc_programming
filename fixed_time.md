@@ -9,8 +9,10 @@ Specifically, signal groups and the conflict matrix are defines in the intersect
 
 Similary, regional settings like red-yellow time is defined in the regional/controller/intersection configuration, not in the signal program.
 
+Controllers must use UTC [synchronized](synchronization.md) using NTP.
+
 ## Cycle counter
-Controllers must use UTC [synchronized](synchronization.md) using NTP. UTC is converted to Unix Time to get a global second counter.
+UTC is converted to Unix Time to get a global second counter.
 
 The **base cycle counter** is defined as the qoutient of Unix Time divided by the cycle length.
 
