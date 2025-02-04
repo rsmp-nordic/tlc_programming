@@ -9,6 +9,15 @@ Specifically, signal groups and the conflict matrix are defines in the intersect
 
 Similary, regional settings like red-yellow time is defined in the regional/controller/intersection configuration, not in the signal program.
 
+## Cycle counter
+Controllers must use UTC [synchronized](synchronization.md) using NTP. UTC is converted to Unix Time to get a global second counter.
+
+The **base cycle counter** is defined as the qoutient of Unix Time divided by the cycle length.
+
+The **cycle counter** is defined as the qoutient of Unix Time plus offset divided by the cycle length.
+
+Multiple controllers can be coordinated if they all run fixed-time program with the same cycle length. Offset is then used to adjust the relative phasing of the fixed-time programs.
+
 ## Structure
 A fixed-time program defines the cycle length and offset and all signal group transitions:
 
@@ -51,6 +60,19 @@ Avaiable states:
 - A: Red rest without start order
 
 (These states are taken from https://rsmp-nordic.github.io/rsmp_sxl_traffic_lights/1.2.1/signal_group_status.html)
+
+## Changing Offset
+A changing in offset can happen for several reasons, e.g.:
+- manual change of the offset
+- change between signal programs
+- synchronization of the underlying UTC time
+- leap seconds
+
+However, the offset cannot simply be abruptly changed, as this might cause invalid state changes, or might violate constrainst like minimum or inter-green times.
+
+Instead the desired offset must be reached as quickly as possible while respecting all constraints.
+
+[to be expanded]
 
 ## Failures
 You are responsible for making sure the appropriate safety times, etc. are respected.
