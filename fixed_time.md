@@ -5,7 +5,7 @@ A fixed time program is a basic form of control strategy which define a fixed cy
 Running a fixed time program depends on regional, controller and intersection [configurations](configurations.md), which are defined outside the
 signal program.
 
-Specifiically, signal groups and the conflict matrix are defines in the intersection configurarion, not in the signal program.
+Specifically, signal groups and the conflict matrix are defines in the intersection configurarion, not in the signal program.
 
 Similary, regional settings like red-yellow time is defined in the regional/controller/intersection configuration, not in the signal program.
 
@@ -14,6 +14,7 @@ A fixed-time program defines a cycle length and the transitions:
 
 ```yaml
 length: 60
+offset: 0
 groups: ["a1","a2","b1","b2"]
 states:
   0:    "00AA"
@@ -22,8 +23,9 @@ states:
   34:   "AA11"
 ```
 
-- `length` defines the cycle length in seconds, in this case 60s. When this time is reached, the program starts over.
-- `groups` is an ordered lists of signal groups.
+- `length` defines the cycle length in seconds. Must be positive. When this time is reached, the program starts over.
+- `offset` defines the cycle offset in seconds. Must be in the range 0..length.
+- `groups` is an ordered lists of signal groups. Must match the actual groups
 - `states` is a hash of signal states, with keys indicating the time in seconds and the representing the state of all groups.
   Each character in the string represent the state of a signal group;
   the first character corresponds to the first group in the `groups` list,
