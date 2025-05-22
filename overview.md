@@ -30,5 +30,7 @@ Program are stored as YAML files, but can be transmitted as eg. JSON or CBOR.
 ## Control Strategies
 The first control strategy supported is [fixed-time](fixed_time.md).
 
+Startup and shutdown is is handled by [startup and shutdown programs](startup_shutdown.md).
+
 Additional control strategies will be added later.
 
