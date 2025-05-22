@@ -34,7 +34,7 @@ states:
   34:   "AA11"
 skips: { 2: 20 }
 waits: { 22: 10, 32: 20 }
-switch: [2]
+switch: 2
 ```
 
 - `length` defines the cycle length in seconds. Must be positive. When this time is reached, the program starts over.
@@ -49,18 +49,20 @@ switch: [2]
   Locations must be equal to or greater than zero and less than `length`. Duration must be greater than zero and less than `length`.
 - `waits` is a hash of wait points, with each wait point defined as <location>:<duration>. Must contain at least item.
   Locations must be equal to or greater than zero and less than `length`. Duration must be greater than zero and less than `length`.
+- `switch` defines the location of the switch point, where the controller can switch to/from other program.
+  Must be greater than zero and less than `length`
 
 The program above is for a simple four-legged interesection with A and B directions. The intersection has four singal groups; a1, a2, b1 and b2. The A direction is green for the first 30s and the B direction is green (1) for the last 30s, with some red-yellow (0) transitions in between:
 
 ```
-a1   |011111111111111AAAAAAAAAAAAAAA|
-a2   |011111111111111AAAAAAAAAAAAAAA|
-b1   |AAAAAAAAAAAAAAA001111111111111|
-b2   |AAAAAAAAAAAAAAA001111111111111|
-     0s              30s            60s
+a1     |011111111111111AAAAAAAAAAAAAAA|
+a2     |011111111111111AAAAAAAAAAAAAAA|
+b1     |AAAAAAAAAAAAAAA001111111111111|
+b2     |AAAAAAAAAAAAAAA001111111111111|
+       0s             30s             60s
 ```
 
-## States
+### States
 Avaiable states:
 
 - a: Disabled, dark
@@ -69,6 +71,7 @@ Avaiable states:
 - A: Red rest without start order
 
 (These states are taken from https://rsmp-nordic.github.io/rsmp_sxl_traffic_lights/1.2.1/signal_group_status.html)
+
 
 ## Changing Offset
 A changing in offset can happen for several reasons, e.g.:
@@ -85,13 +88,14 @@ Instead the desired offset must be reached as quickly as possible while respecti
 Skip and wait points are used to specify how the offset can be shifted. The program above can be shown as:
 
 ```
-a1   |01111111111111AAAAAAAAAAAAA|
-a2   |01111111111111AAAAAAAAAAAAA|
-b1   |AAAAAAAAAAAAAA0011111111111|
-b2   |AAAAAAAAAAAAAA0011111111111|
-skip   10-------->
-wait             10   20
-     0s              30s          60s
+a1     |01111111111111AAAAAAAAAAAAA|
+a2     |01111111111111AAAAAAAAAAAAA|
+b1     |AAAAAAAAAAAAAA0011111111111|
+b2     |AAAAAAAAAAAAAA0011111111111|
+skip   | 10-------->               |
+wait   |           10   20         |
+switch |                           |
+       0s            30s           60s
 ```
 
 Adjusting the location and duration of skip and wait points can be used to control how different parts of the cycle is prioritized when changing offset,
@@ -114,32 +118,22 @@ A switch between programs can only happen at switch points. Switch points must b
 
 P1:
 ```
-length: 60
-offset: 0
-switch: [2]
-a1   |01111111111111AAAAAAAAAAAAA|
-a2   |01111111111111AAAAAAAAAAAAA|
-b1   |AAAAAAAAAAAAAA0011111111111|
-b2   |AAAAAAAAAAAAAA0011111111111|
-skip   10-------->
-wait             10   20
-switch *     
-     0s              30s          60s
+a1     |01111111111111AAAAAAAAAAAAA|
+a2     |01111111111111AAAAAAAAAAAAA|
+b1     |AAAAAAAAAAAAAA0011111111111|
+b2     |AAAAAAAAAAAAAA0011111111111|
+switch | *                         |
+       0s            30s           60s
 ```
 
 P2:
 ```
-length: 80
-offset: 20
-switch: [28]
-a1   |AAAAAAAAAAAAA0111111111111111111111|
-a2   |AAAAAAAAAAAAA0111111111111111111111|
-b1   |0011111111111AAAAAAAAAAAAAAAAAAAAAA|
-b2   |0011111111111AAAAAAAAAAAAAAAAAAAAAA|
-skip   10-------->
-wait             20            20
-switch              *     
-     0s              30s          60s
+a1     |AAAAAAAAAAAAA0111111111111111111111|
+a2     |AAAAAAAAAAAAA0111111111111111111111|
+b1     |0011111111111AAAAAAAAAAAAAAAAAAAAAA|
+b2     |0011111111111AAAAAAAAAAAAAAAAAAAAAA|
+switch |              *                    |
+       0s            30s           60s
 ```
 
 Notice how the group states are the same for the switch point in P1 and P2.
