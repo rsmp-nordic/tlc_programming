@@ -2,11 +2,11 @@
 A startup program is used to go from standby or fault to normal operation.
 A shutdown program is used to go from normal mode to standby.
 
-Startup and shutdown programs are similar to normal [fixed-time](fixed_time.md) programs, but have no offset, and no skip points or wait points:
+Startup and shutdown programs are similar to normal [fixed-time](fixed_time.md) programs, but have no offset, and no skip points or wait points.
 
 The controller must have one startup program and one shutdown program.
 
-Startup and shutdown programs should not be listed as normal programs and shoudl not targetable for normal program switching. Instead they are targeted automatically when the controller starts up or shuts down.
+Startup and shutdown programs should not be listed as normal programs and should not be targetable for normal program switching. Instead they are targeted automatically when the controller starts up or shuts down.
 
 The **initial state** after a power on is always dark. The **standby state** is defined in the controller configuration, not as part of signal programs. It can be dark or some other state like yellow flash, since the power is still on.
 
