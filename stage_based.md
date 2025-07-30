@@ -21,14 +21,14 @@ stages:
   main: 
     groups: ["a1", "a2"]
     duration: 20
-    max: 30
+    max: 29
   side:
     groups: ["b1", "b2"]
     duration: 20
     min: 10
-    max: 25
+    max: 26
   turn:
-    open: ["b2"]
+    groups: ["b2"]
     duration: 10
 order: [:main, :turn, :side]
 switch: :main
@@ -82,40 +82,71 @@ A change in offset can happen for several reasons, e.g.:
 
 However, the offset cannot simply be abruptly changed, as this might cause invalid state changes, or might violate constraints like minimum or inter-green times.
 
-Instead the desired offset must be reached as quickly as possible while respecting all constraints.
+Instead the offset must be moved by shortening of extending stages. Since all groups remain in the same stage, this is guaranteed to never cause invalid state changes. The interstages are not affected when moving the offset.
 
 ### Extending and Shortening Stages
-If the offset needs to move backward the controller can extend a stage up to the `max` set for the stage. If max is not set, the stage cannot be extended.
-Conversely, if the offset needs to move forward the controller can shorten a stage down to the `min` set for the stage. If min is not set, the stage cannot be shortened.
+Shortening stages will move the offset forward, while extending stages will move the backward.
 
-Reaching the target offset will typically be quicker if both min and max values are defined. If no minimum or maximum values are defined, the controller cannot adjust the offset, and the program cannot be coordinated with other controllers.
+Since the program is cyclic, reaching the target offset get can be done either by shorting or extending stages, but the fastest way should be chosen.
+
+Only stages with `min` set can be shortened, while only stages with `max`set can be extended. Stages with neither `min`nor `max` are fixed in duration. If no `min`or `max` is set for any stage, the offset cannot be moved, and the controller cannot be coordinated with other controllers.
 
 Reaching the target offset might take more than one cycle, depending on the min/max values defined.
 
-Once the target offset is reached, the controller must adjust stage durations to ensure that the cycle time matches the value defined in the program.
-
+Once the target offset is reached, the controller must adjust stage durations to ensure that the cycle time matches the value defined in the program, taking into account the interstage durations.
 
 ### Proportional Offset Adjustment
-The controller must use the default, min and max durations defined for each stage to distribute an adjustment proportionally across stages.
+Shortening and extensioning stages must be done proportionally, while respecing min and max values.
 
-Possible extension is computed as: max - default
-Possible shortening is computed as: default - min.
 
-In the program above, maximum shortenings and extensions are:
+The possible shortening of a stage is computed as `default - min`, while the possible extension is computed as `max - default`.
+
+The possible shortening/extension of each stage is calculated as:
+- extension_possible = max - default
+- shortening_possible = default - min
+
+The total possible shortening/extension of all stages is calculated as:
+- total_extension_possible = sum of all extension_possible values
+- total_shortening_possible = sum of all shortening_possible
+
+The proportion for each stage is calculated as:
+- extension_proportion = extension_possible / total_extension_possible
+- shortening_proportion = shortening_possible / total_shortening_possible
+
+
+For the program above, the proportions for extending are calculated as:
+
+- extension_possible (main) = max - default = 29 - 20 = 9
+- extension_possible (side) = max - default = 26 - 20 = 6
+- total_extension_possible = sum of all extension_possible values = 9 + 6 = 15
+- extension_proportion (main) = extension_possible / total_extension_possible = 9 / 15 = 6/10 = 60%
+- extension_proportion (side) = extension_possible / total_extension_possible = 6 / 15 = 4/10 = 40%
+
+The proportions for shortening are are calculated as:
+
+- shortening_possible (side) = duration - min = 20 - 10 = 10
+- total_shortening_possible = sum of all shortening_possible values = 10
+- shortening_proportion (side) = shortening_possible / total_shortening_possible =  10/10 = 100%
+
 
 |Stage|Shorten|Extend|
 |--|--|--|
-|main||10s (66%)|
-|side|10s (100%)|5s (33%)|
+|main||9s (60%)|
+|side|10s (100%)|6s (40%)|
 |turn|||
 
 The proportions are shown as percentages.
 
-If the offset must be moved back by 9s the `main` stage will be extended by 6s, while `side` will be extended by 3s. 
+
+If the offset must be moved back (i.e. stages extended), then the duration is distributed according to the percentages.
+
+For example, if the offset must be moved back by 10s, then the `main` stage will be extended by 6s (60% of 10s), while `side` will be extended by 4s (40% of 10s).
+
 After a single cycle, the offset target will be reached, and the stage will go back to durations that ensure that the cycle time is 60s (including interstages).
 
-If the offset must be moved back by 21s the `main` stage needs to be extended by 14s, while `side` needs to be extended by 7s. But the max extensions must be respected, so in the first cycle,
- `main` will be extended by 10s, and `side` by 5s, which will move the offset back by 15s, leaving it 6s from the target. In the second cycle, the `main` stage will be extended by 4s and `side` by 2s.
+Max value for extension and shortening must be respected, which might mean that several cycles are require to reach the target offset.
+
+For example, if the offset must be moved back (and thus stages extended) by 25s, then the `main` stage needs to be extended by 15s (60% of 25s), while `side` needs to be extended by 10s (40% of 25s). But the max extensions must be respected, so in the first cycle, `main` can only be extended by 9s, and `side` by 6s, which will move the offset back by 15s, leaving it 10s from the target. In the second cycle, `main` will be extended by 6s, while `side` is extended by 4s, after which the target offset is reached.
 
 ## Switching Programs
 A program switch can occur only at the start of the stage defined in `switch`. Both the current and target programs must have compatible signal states at the switch point to ensure a safe transition.
