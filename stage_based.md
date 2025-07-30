@@ -96,7 +96,7 @@ Reaching the target offset might take more than one cycle, depending on the min/
 Once the target offset is reached, the controller must adjust stage durations to ensure that the cycle time matches the value defined in the program, taking into account the interstage durations.
 
 ### Proportional Offset Adjustment
-Shortening and extensioning stages must be done proportionally, while respecing min and max values.
+Shortening and extending stages must be done proportionally, while respecing min and max values.
 
 
 The possible shortening of a stage is computed as `default - min`, while the possible extension is computed as `max - default`.
@@ -122,7 +122,7 @@ For the program above, the proportions for extending are calculated as:
 - extension_proportion (main) = extension_possible / total_extension_possible = 9 / 15 = 6/10 = 60%
 - extension_proportion (side) = extension_possible / total_extension_possible = 6 / 15 = 4/10 = 40%
 
-The proportions for shortening are are calculated as:
+The proportions for shortening are calculated as:
 
 - shortening_possible (side) = duration - min = 20 - 10 = 10
 - total_shortening_possible = sum of all shortening_possible values = 10
