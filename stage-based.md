@@ -22,18 +22,18 @@ stages:
     open: ["a1", "a2"]
     duration: { default: 20, max: 29}
     transitions:
-      side: { 0: "11000", 3: "00220", 5: nil }
-      turn: { 0: "11000", 3: nil }
+      side: { 0: "11000", 3: "00220", 5: null }
+      turn: { 0: "11000", 3: null }
   side:
     open: ["b1", "b2"]
     duration: { min: 10, default: 20, max: 26}
     transitions:
-      turn: { 0: "11000", 3: nil }
+      turn: { 0: "11000", 3: null }
   turn:
     open: ["a1_l"]
     duration: { default: 10}
     transitions:
-      main: { 0: "11000", 3: nil }
+      main: { 0: "11000", 3: null }
 ```
 
 - **cycle**: Cycle time
@@ -48,7 +48,7 @@ A transition map define all state changes during the transation:
   - keys: The transition time in seconds, measuring from the start of the transition. The first item must hve time 0.
   - values: A string containing the state of all signal groups, with a character for each group, in the order defined in the 'groups' attribute.
 
-Transition maps must include one element with the value `nil`, whicb indicates the end (and thus the duration) of the transition. No other item can have a later time.
+Transition maps must include one element with the value set to null/nil, whicb indicates the end (and thus the duration) of the transition. No other item can have a later time.
 
 
 In the program above, the `main` stage can transtion to either `side` or `turn`. Going through stages main-side-turn can be visualized as:
