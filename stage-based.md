@@ -1,5 +1,5 @@
 # Stage-based Strategy
-A stage-based program consists of stages separated by transitions. All state changes occur during transitions, while state state remain static during stages.
+A stage-based program consists of stages separated by transitions. All state changes occur during transitions, while state remain static during stages.
 
 ## Prerequisites
 Running a stage-based program depends on regional, controller, and intersection [configurations](configurations.md), which are defined outside the signal program.
@@ -44,12 +44,12 @@ stages:
   - `duration`: Durations in seconds. `default` is required, while `min` and `max` are optional and specify possible shortening and extension.
   - `transitions`: Possible transitions. The key is the name of the stage to transition to, while the value is a transition map.
 
-A transition map define all state changes during a transation:
+A transition map defines all state changes during a transition:
   - keys: Transition time in seconds, measured from the start of the transition.
   - values: A string containing the state of all signal groups, with one character for each group, in the order defined in the 'groups' attribute.
 
-Transition maps msut include one element with the tiem set to 0, representing the start of the transition.
-Transition maps must include one element with the value set to null/nil, which indicates the end of the transition. No  item can have times later than the end.
+Transition maps must include one element with the time set to 0, representing the start of the transition.
+Transition maps must include one element with the value set to null/nil, which indicates the end of the transition. No item can have times later than the end.
 
 In the program above, going through stages main-side-turn can be visualized as:
 
@@ -74,13 +74,13 @@ All groups remain in the same state throughout the stage. All state changes happ
 You can define how much the stage can be shortened or extended by setting `min` and/or `max` durations.
 
 ## Transitions
-A transition defines how to move from one stage to another by explicitely listing all states changes, including intermediate states like yellow.
+A transition defines how to move from one stage to another by explicitly listing all state changes, including intermediate states like yellow.
 
 A transition does not include the start and end states, as these are defined by the stages you come from and go to.
 
-Transitions a fiex and goes through the same state changes every time, with the same duration.
+A particular transition always goes through the same state changes with the same duration.
 
-If a transition between stagess A and B is not defined, the program cannot transition directly from A to B, alhough it might be possible to reach B via other stages.
+If a transition between stages A and B is not defined, the program cannot transition directly from A to B, although it might be possible to reach B via other stages.
 
 When designing a stage-based program, it must be ensured that all transitions are valid.
 
@@ -94,12 +94,12 @@ Intersections that use the same cycle length can be coordinated by modifying the
 
 However, the offset cannot be changed abruptly, as this might cause invalid state changes or might violate constraints like minimum or intergreen times.
 
-Instead the offset must be moved by shortening or/ extending stages. Since all groups remain in the same state during a stage, this is guaranteed to never cause invalid state changes.
+Instead the offset must be moved by shortening or extending stages. Since all groups remain in the same state during a stage, this is guaranteed to never cause invalid state changes.
 
 ### Extending and Shortening Stages
 Shortening stages will move the offset forward, while extending stages will move it backward.
 
-Since the program is cyclic, reaching the target offset can be achieved either by shorting or extending stages. The quickest way should be chosen.
+Since the program is cyclic, reaching the target offset can be achieved either by shortening or extending stages. The quickest way should be chosen.
 
 Only stages with `min` defined can be shortened and only stages with `max` defined can be extended.
 
@@ -109,14 +109,14 @@ When trying to reach the target offset, shortening/extending is done one stage a
 
 Once the target offset is reached, the controller must adjust stage durations to ensure that the actual cycle time matches the cycle time defined in the program, taking into account the transition durations.
 
-A program is invalid if the stages cannot be extended/shorted so that the actual cycle time matches the cycle time defined for the program.
+A program is invalid if the stages cannot be extended/shortened so that the actual cycle time matches the cycle time defined for the program.
 
 ## Switching Programs
 A program switch can occur only at the start of the stage defined in `switch`.
 
 It's allowed to switch between programs using different control strategies. But whether you switch to a program with the same or different control strategy, the current and target programs must have compatible signal states at the switch point.
 
-When a switch is requested the controller continues until the switch point, then continues from the switch point in the target program. When switching to a stage-based program, the progam continues from the start of the stage defined as the switch point.
+When a switch is requested the controller continues until the switch point, then continues from the switch point in the target program. When switching to a stage-based program, the program continues from the start of the stage defined as the switch point.
 
 Once the program has switched, a new target offset is determined and the offset is gradually moved to the target, using the mechanism defined for the type of strategy of the target program.
 
