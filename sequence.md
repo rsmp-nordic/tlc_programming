@@ -5,23 +5,21 @@ Sequences are used e.g. for [startup/shutdown](startup_shutdown.md) and when a [
 
 Example:
 ```yaml
-length: 10
 groups: ["a1","a2","b1","b2"]
-states:
-  0: "0000"
-  4: "1100"
-  8: "AA00"
+states: [
+  "0000", 4, 
+  "1100", 4,
+  "AA00", 2
+]
 ```
 
 Where:
-- length: the length of the sequence
 - groups: list of signal groups
-- states: a map of time/state pairs
+- states: an array of alternating state and duration items. Must have an even number of items.
 
 ## Program switching
-Switching to/from a sequence always happens at the beginning or end of the sequence.
+Switching to a sequence always happens at the beginning or end of the sequence.
+Switching from a sequece can ony happen at the end of the sequence, except if a fault happens in which case the controller immediately switches to the [fault](fault.md) sequence.
 
-Since a sequence does not cycle, a target program must be set before running the sequence, so that the controller knows where to continue when reaching the end of the sequence.
-
-If the end of the sequence is reached and no target program is set, it's a fault.
+If no target program is set when reaching the end of a sequence, it's a fault. 
 
