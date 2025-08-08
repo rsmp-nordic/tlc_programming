@@ -15,6 +15,7 @@ A stage-based program has the following structure:
 
 ```yaml
 groups: ["a1", "a2", "b1", "b2", "a1_l"]
+switch: "main"
 stages:
   main:
     open: ["a1", "a2"]
@@ -26,8 +27,6 @@ stages:
     open: ["a1_l"]
     duration: { default: 10}
 transitions:
-  standby:
-    main:       ["00000", 2, "11000", 4, "AA000", 6]   # startup sequence
   main:
     side:
       default:  ["11000", 3, "00220", 2]
@@ -37,11 +36,8 @@ transitions:
     turn:
       default:  ["11000", 3]
       busy:     ["11000", 5]
-    standby:    ["AA000", 2, "11000", 4, "00000", 6]   # shutdown sequence
   turn:
     main:       ["11000", 3]
-  fault:
-    standby:    ["00000", 2, "BBBBB", 4]   # fault sequence
 programs:
   quiet:
     main: ["side, "turn"]
@@ -58,6 +54,7 @@ programs:
 - **cycle**: Cycle time.
 - **offset**: Default offset.
 - **groups**: List of all signal groups.
+- **switch**: Stage where program switch can happen.
 - **standby**: Standby states of all groups.
 - **stages**: Stages by name.
 - **transition**: Transitions by source stage.
@@ -74,6 +71,7 @@ You can define how much the stage can be shortened or extended by setting `min` 
 A stage is defined as a map with:
   - `open`: List of signal groups that are open (typically green).
   - `duration`: Durations in seconds. `default` is required, while `min` and `max` are optional and specify possible shortening and extension.
+  - `switch`: True if program switch can happen at the beginning of this stage.
 
 ### Transitions
 A transition defines how to move from one stage to another by explicitly listing all state changes, including intermediate states like yellow.
@@ -133,29 +131,6 @@ slashes are used, e.g.:
 
 Note: No logic is yet defined for how to choose which transition to use. This will be expanded later.
 
-## Startup and shutdown
-THe stage name `standby` has a special meaning. A stage with this name cannot be defined,
-but can be referenced in transitions
-
-One transition from the `standby` stage mus be defined, and is the startup sequence.
-One transition to the `standby` stage mus be defined, and is the shutdown sequence.
-
-When the controller powers up, it will start in the standby stage, and groups will be in the
-standby state, which is part of the intersection config, not the program.
-
-Example:
-
-```yaml
-transitions:
-  standby:
-    main:       ["00000", 2, "11000", 4, "AA000", 6]   # startup sequence
-  side:
-    standby:    ["AA000", 2, "11000", 4, "00000", 6]   # shutdown sequence
-```
-
-Here, after power up, the controller will transition into the `main` stage.
-Shutting down will happen after the `side` stage.
-
 ## Example
 For the program shown at the top, going through the stages main-side-turn can be visualized as:
 
@@ -198,11 +173,11 @@ Once the target offset is reached, the controller must adjust stage durations to
 A program is invalid if the stages cannot be extended/shortened so that the actual cycle time matches the cycle time defined for the program.
 
 ## Switching Programs
-A program switch can occur only at the start of the stage defined in `switch`.
+A program switch can occur only at the stage specied inm `switch`. The switch happens at the start of the stage.
 
 It's allowed to switch between programs using different control strategies. But whether you switch to a program with the same or different control strategy, the current and target programs must have compatible signal states at the switch point.
 
-When a switch is requested the controller continues until the switch point, then continues from the switch point in the target program. When switching to a stage-based program, the program continues from the start of the stage defined as the switch point.
+When a switch is requested the controller continues until the switch point, then continues from the switch point in the target program.
 
 Once the program has switched, a new target offset is determined and the offset is gradually moved to the target, using the mechanism defined for the type of strategy of the target program.
 
@@ -210,15 +185,4 @@ Once the program has switched, a new target offset is determined and the offset 
 The controller must respect all safety constraints (minimum green, intergreen, etc.). Invalid configurations or unsafe transitions result in a fault.
 Programs should be validated using a simulator or test tool before deployment.
 
-If a fault occurs, the controller immediately runs the fault to standby transition.
-If the transition foes goes to the `fault` stage the controller goes into the standby state.
-
-If another stage is specified, it continues with that stage.
-
-```yaml
-transitions:
-  fault:
-    standby:    ["00000", 2, "BBBBB", 4]   # fault sequence
-```
-
-If no fault transition is defined, the controller immedately goes to the standby state in case of a fault.
+If a fault occurs, the controller immediately switches to the fault program.
