@@ -11,54 +11,87 @@ Similarly, regional settings like red-yellow time are defined in the regional/co
 Controllers must use UTC [synchronized](synchronization.md) using NTP.
 
 ## Structure
-A stage-based program has the following structure:
+Stage-based programs first define stages and transitions, which are shared between programs:
 
 ```yaml
 groups: ["a1", "a2", "b1", "b2", "a1_l"]
-switch: "main"
 stages:
   main:
     open: ["a1", "a2"]
-    duration: { default: 20, max: 29}
+    duration: { default: 20, max: 29 }
   side:
     open: ["b1", "b2"]
-    duration: { min: 10, default: 20, max: 26}
+    duration: { min: 10, default: 20, max: 26 }
   turn:
     open: ["a1_l"]
-    duration: { default: 10}
+    duration: { default: 10 }
+  oneway:
+    open: ["a1"]
 transitions:
   main:
     side:
       default:  ["11000", 3, "00220", 2]
-      busy:     ["11000", 5, "00220", 4]
-    turn:       ["11000", 3]
+      quick:    ["11000", 5, "00220", 4]
+    turn:       ["11002", 3]
+    oneway:     ["11000", 3]
   side:
     turn:
-      default:  ["11000", 3]
-      busy:     ["11000", 5]
+      default:  ["11000", 5]
+      quick:    ["11000", 3]
   turn:
     main:       ["11000", 3]
-programs:
-  quiet:
-    main: ["side, "turn"]
-    side: ["turn"]
-    turn: ["main"]
-  busy:
-    main: ["side/busy"]
-    side: ["main", "main/busy"]
-  event:
-    main: ["turn"]
-    turn: ["main"]
+  oneway:
+    main:       ["00110", 4]
 ```
 
-- **cycle**: Cycle time.
-- **offset**: Default offset.
-- **groups**: List of all signal groups.
-- **switch**: Stage where program switch can happen.
-- **standby**: Standby states of all groups.
-- **stages**: Stages by name.
-- **transition**: Transitions by source stage.
-- **programs**: Programs by name.
+A program defines the stages and possible transitions, as well as how you can enter and leave the program.
+
+Here a program for quiet periods:
+
+```yaml
+name: quiet
+flow:
+  main:
+    side:
+    turn:
+  side:
+    turn:
+  turn:
+    main:
+enter:
+  main:
+leave:
+  side:
+```
+
+A program for busy periods:
+```yaml
+name: busy
+flow:
+  main:
+    side: { using: quick }
+  side:
+    main: { using: quick }
+enter:
+  side:
+leave:
+  main:
+    side: { using: quick }
+```
+
+
+A program for a special event:
+```yaml
+name: event
+flow:
+  oneway:
+enter:
+  main:
+    oneway:
+leave:
+  oneway:
+    main:
+```
 
 ### Stages
 Each stage is defined by which groups are open and for how long. All other groups must be closed.
@@ -114,22 +147,67 @@ A program is defined by which stages and transitions be be used.
 It's defined as a map of source/transtions, with transitions  listed using an array of strings, e.g:
 
 ```yaml
-    main: ["side, "turn"]
-    side: ["turn"]
-    turn: ["main"]
+flow:
+  main:
+    side:
+    turn:
+  side:
+    turn:
+  turn:
+    main:
 ```
 
 Here the the controller can go from the main stage to either the side or the turn stage.
 From side it can go only to side, and from turn it can go only to main.
 
 In case different transitions are defined for the same source/destination stage pair,
-slashes are used, e.g.:
+the variant is specified with 'using':
 
 ```yaml
-    side: ["main", "main/busy"]
+  main:
+    side: { using: quick }
 ```
 
 Note: No logic is yet defined for how to choose which transition to use. This will be expanded later.
+
+## Switching Programs
+A program switch can occur at a stage that's present in both the origin and destination programs.
+
+Switch stages are specified as:
+```yaml
+enter:
+  main:
+leave:
+  side:
+```
+
+If you need to switch to a program that does not share any stages, you can istead use a transition:
+
+```yaml
+enter:
+  main:
+    oneway:
+leave:
+  oneway:
+    main:
+```yaml
+
+In this example, the transitions between main and oneway stages are not used in the normal flow of the program, but can be used to switch to a program that has uses the main stage.
+
+You can specify a transition variant if needed:
+
+```yaml
+leave:
+  main:
+    side: { using: quick }
+```
+
+
+It's allowed to switch between programs using different control strategies. But whether you switch to a program with the same or different control strategy, the two programs must have compatible signal states at the switch point. This mean there must be a stage with matching states. This state does not have be be used in the normal flow of any stage-based program, but can be used just in enter/leave definitions.
+
+When a switch is requested the controller continues until the switch point, then continues from the switch point in the target program.
+
+Once the program has switched, a new target offset is determined and the offset is gradually moved to the target, using the mechanism defined for the type of strategy of the target program.
 
 ## Example
 For the program shown at the top, going through the stages main-side-turn can be visualized as:
@@ -172,17 +250,7 @@ Once the target offset is reached, the controller must adjust stage durations to
 
 A program is invalid if the stages cannot be extended/shortened so that the actual cycle time matches the cycle time defined for the program.
 
-## Switching Programs
-A program switch can occur only at the stage specied inm `switch`. The switch happens at the start of the stage.
-
-It's allowed to switch between programs using different control strategies. But whether you switch to a program with the same or different control strategy, the current and target programs must have compatible signal states at the switch point.
-
-When a switch is requested the controller continues until the switch point, then continues from the switch point in the target program.
-
-Once the program has switched, a new target offset is determined and the offset is gradually moved to the target, using the mechanism defined for the type of strategy of the target program.
-
 ## Faults
 The controller must respect all safety constraints (minimum green, intergreen, etc.). Invalid configurations or unsafe transitions result in a fault.
 Programs should be validated using a simulator or test tool before deployment.
 
-If a fault occurs, the controller immediately switches to the fault program.
