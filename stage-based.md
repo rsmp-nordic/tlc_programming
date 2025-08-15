@@ -58,7 +58,7 @@ programs:
     turn:  {side:}
 ```
 
-The `quiet` program going through the stages main-side-turn can be visualized as:
+The `quiet` program going through the stages main-side-turn can be visualized as a timeline:
 
 ```
 stage  |main              |      |side             |   |turn    |   |
@@ -69,6 +69,19 @@ b2     |                  |   222|AAAAAAAAAAAAAAAAA|111|        |   |
 a1_l   |                  |      |                 |   |AAAAAAAA|111|
 switch |*                 |      |                 |   |        |   |
        0s                                                           60s
+```
+
+Or as a stage diagram:
+
+```mermaid
+stateDiagram-v2
+    direction LR
+    [*] --> main
+    main --> side
+    main --> turn
+    side --> turn
+    turn --> main
+    turn --> [*]
 ```
 
 ## Stages
@@ -177,8 +190,10 @@ Note: No logic is yet defined for how to choose which transition to use. This wi
 A program switch can occur at stages that are marked for either entering or leaving, usign the special stage names `enter` and `leave`:
 
 ```yaml
-    enter: {main:}
-    main:  {leave:}
+    enter:
+      main:
+    main:
+      leave:
 ```
 ### Direct switch
 If program A allows leaving from the `main` stage, and program B allows entering into the same `main` stage, then a switch from A to B can happend directy as soon as the main stage is reached.
@@ -187,7 +202,8 @@ If program A allows leaving from the `main` stage, and program B allows entering
 If program A allows leaving from the `main` stage, but program B allows entering only to a different stage like `side`, then a transition from the `main` stage to the `side` stage must be defined for a switch to be possible. If more than one transition between the two stages are defined you can specify which one is used:
 
 ```yaml
-    enter: {main:}
+    enter:
+      main:
     main:
       leave: quick
 ```
