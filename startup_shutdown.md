@@ -1,24 +1,25 @@
-# Startup and Shutdown Sequences
-A startup [sequence](sequence.md) is used to go from standby or fault to running, while a shutdown sequence is used to go from running to standby.
+# Startup and Shutdown Programs
+A startup program is used to go from standby or fault to running, while a shutdown program is used to go from running to standby.
 
-The controller must have one startup sequence and one shutdown sequence.
+The controller must have one startup program and one shutdown program.
 
-Startup and shutdown sequences should not be listed as normal programs and should not be targetable for normal program switching. Instead, they are targeted automatically when the controller starts up or shuts down.
+Startup and shutdown program should not be listed as normal programs and should not be targetable for normal program switching. Instead, they are targeted automatically when the controller starts up or shuts down.
 
 The **initial state** after a power-on is always dark. The **standby state** is defined in the controller configuration, not as part of signal programs. It can be dark or some other state like yellow flash, since the power is still on.
 
+The states to run through is defined using a [state sequence](sequence.md).
+
 ## Startup
-Example of a startup program:
+Structure:
 ```yaml
-length: 10
 groups: ["a1","a2","b1","b2"]
-states:
-  0: "0000"
-  4: "1100"
-  8: "AA00"
+states: [
+  "0000", 4,
+  "1100", 4,
+  "AA00", 2
 ```
 
-The startup program above can be visualized as:
+This can be visualized as:
 
 ```
 a1     |00001111AA| # The main 'a' direction goes through red-yellow-green
@@ -42,17 +43,16 @@ A startup program always runs from the start to the end and never cycles.
 If the controller runs in coordinated mode, it can choose to stay a while in standby state before running the startup program. Or it can immediately run the startup program, switch to another program and then use the skip/wait mechanism to coordinate. Which method is used is controlled by configurations in the controller.
 
 ## Shutdown
-Example of a shutdown program:
+Structure:
 ```yaml
-length: 10
 groups: ["a1","a2","b1","b2"]
 states:
-  0: "AA00"
-  2: "1100"
-  6: "0000"
+  "AA00", 2,
+  "1100", 4,
+  "0000", 4,
 ```
 
-The shutdown program above can be visualized as:
+This can be visualized as:
 ```
 a1     |AA11110000| # The main 'a' direction goes through green-yellow-red
 a2     |AA11110000|
