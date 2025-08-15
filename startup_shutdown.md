@@ -68,3 +68,6 @@ When shutting down the controller:
 - when it reaches the end it goes to standby state and halts, i.e. stops the cycle counter
 
 A shutdown program always runs from the start to the end and never cycles.
+
+## Switch points
+A startup program can only switch at the end of the program, while a shutdown program can only switch at the start of the program.
