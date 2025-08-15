@@ -215,8 +215,9 @@ groups: ["a1", "a2", "b1", "b2", "a1_l"]
 stages:
   main:
     open: ["a1", "a2"]
+```
 
-For example, the main stage has groups a1 and a2 open, and all other groups closed, corresponding to the state "11000". You can switch to/from another type of program, e.g. a fixed time program, if it defines a switch points with the same state.
+For example, the main stage has groups a1 and a2 open and all other groups closed, corresponding to the state "11000". You can switch to/from another type of program, e.g. a fixed time program, if it defines a switch points with the same state.
 
 ## Changing Offset
 Intersections that use the same cycle length can be coordinated by modifying their offsets. But a change in offset can happen for other reasons, e.g.:
