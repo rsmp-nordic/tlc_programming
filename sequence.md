@@ -1,7 +1,7 @@
 # Sequence
 A sequence is a a basic sequence of states that signal groups goes through from start to end. A sequence does not cycle and has no offset.
 
-Sequences are used e.g. for [startup/shutdown](startup_shutdown.md) and when a [fault](fault.md) occurs.
+Sequences are used e.g. for [startup/shutdown](startup_shutdown.md).
 
 Example:
 ```yaml
