@@ -1,6 +1,17 @@
 # Stage-based Strategy
 A stage-based program consists of stages separated by transitions. All state changes occur during transitions, while state remain static during stages.
 
+```mermaid
+stateDiagram-v2
+    direction LR
+    [*] --> main
+    main --> side
+    main --> turn
+    side --> turn
+    turn --> main
+    turn --> [*]
+```
+
 ## Prerequisites
 Running a stage-based program depends on regional, controller, and intersection [configurations](configurations.md), which are defined outside the signal program.
 
@@ -58,7 +69,7 @@ programs:
     turn:  {side:}
 ```
 
-The `quiet` program going through the stages main-side-turn can be visualized as a timeline:
+The `quiet` program going through the stages main-side-turn might produce this output:
 
 ```
 stage  |main              |      |side             |   |turn    |   |
@@ -69,19 +80,6 @@ b2     |                  |   222|AAAAAAAAAAAAAAAAA|111|        |   |
 a1_l   |                  |      |                 |   |AAAAAAAA|111|
 switch |*                 |      |                 |   |        |   |
        0s                                                           60s
-```
-
-Or as a stage diagram:
-
-```mermaid
-stateDiagram-v2
-    direction LR
-    [*] --> main
-    main --> side
-    main --> turn
-    side --> turn
-    turn --> main
-    turn --> [*]
 ```
 
 ## Stages
