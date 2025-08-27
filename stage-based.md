@@ -144,13 +144,13 @@ Example:
       busy:     ["11000", 5, "00220", 4]
 ```
 
-The transition name `default` is special. If you define multiple transitions between two stages and refer to a transition bewtween within using a transition name, the `default` transition must be defined and will then be used.
+The transition name `default` is special. If you define multiple transitions between two stages and refer to a transition between then within using a transition name, the `default` transition will then be used.
 
-Transition sequences are defined as an array with an even number of elements. It starts with a state string followed by a duration, and then repeat these pairs. It can have 0, 1 or more state/duration pairs. Each character refers to a group listed in `groups` defined earlier.
+Transition are defined as a [sequence](sequence.md). Each character refers to a group listed in `groups` defined earlier.
 
 ## Programs
 A program is defined by which stages and transitions be be used.
-It's defined as a map of source/transtions, with transitions  listed using an array of strings, e.g:
+It's defined as a map of source/transitions, with transitions listed using an array of strings, e.g:
 
 ```yaml
 programs:
